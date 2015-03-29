@@ -1,5 +1,5 @@
 # BuyAndHold
-Demonstrate the power for Buy and Hold investing
+Demonstrate the power of Buy and Hold investing
 
 This project will establish the power of buy and hold investing.  A user's portfolio is matched up against a simple no fee index based portfolio.  This index portfolio is easy to implement via a discount broker.
 
