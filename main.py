@@ -9,11 +9,11 @@ def main():
 	'''Need to Add Next:
 		-- Unit Testing
 		-- Error trapping (return too large from Yahoo)
-		-- History slicer in the yqlWapper class 
 	'''
 
 	end = date.today()
 	endOrd = end.toordinal()
+
 	begin = endOrd - 370
 	begin = date.fromordinal(begin)
 
@@ -23,6 +23,12 @@ def main():
 	print yoo.rtn_hist_data()
 	# Yahoo Data Connectivity Working as of 2015-03-24
 	
+	begin = endOrd - 1
+	begin = date.fromordinal(begin)
+
+	s = yoo.hist_slicer('RSP', begin, begin)
+	print s 
+
 	return
 
 

@@ -8,6 +8,7 @@ import numpy as np #Will be needed for irr calcs
 class YahooWrapper:
 	def __init__(self):
 		self.qDf = []
+		self.sly = []
 
 	def rtn_hist_data(self):
 		return self.qDf
@@ -24,19 +25,32 @@ class YahooWrapper:
 		quo = rv['quote'] 
 		self.qDf = pd.DataFrame.from_records(quo)
 
-		qDt = []
-		for idx, dta in self.qDf.iterrows():
-			str_ = dta['Date']
-			d = datetime.strptime(str_, '%Y-%m-%d')
-			qDt.append(d)
-
-		arr = [qDt, self.qDf['Symbol']]
-		tup = list(zip(*arr))
-		idx = pd.MultiIndex.from_tuples(tup, names=['iDate','iSymbol'])
-
+		idx = gen_multi_idx(self.qDf['Date'], self.qDf['Symbol'], ['iDate', 'iSymbol'])
+ 
 		self.qDf.index = idx
 
 		return self.qDf
+
+	def hist_slicer(self, sym, begin, end):
+
+		sly = self.qDf.ix[self.qDf.Symbol == sym]
+		
+		sly = sly.ix[sly.Date >= begin.strftime("%Y-%m-%d")]
+		sly = sly.ix[sly.Date <= end.strftime("%Y-%m-%d")]
+		
+		self.sly = sly
+		
+		return sly
+
+
+
+def gen_multi_idx(iOne, iTwo, names_):
+
+	arr = [iOne, iTwo]
+	tup = list(zip(*arr))
+	idx = pd.MultiIndex.from_tuples(tup, names=[names_[0], names_[1]])
+
+	return idx
 
 def hist_query_str(begin, end):
 	b = begin.strftime('%Y-%m-%d')
