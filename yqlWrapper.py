@@ -19,8 +19,12 @@ class YahooWrapper:
 
 		y = yql.Public()
 		result = y.execute(qry)
-
+		
 		rv = result.results
+		
+		if rv is None:
+			self.qDf = []
+			return self.qDf
 
 		quo = rv['quote'] 
 		self.qDf = pd.DataFrame.from_records(quo)
@@ -32,8 +36,14 @@ class YahooWrapper:
 		return self.qDf
 
 	def hist_slicer(self, sym, begin, end):
+		
+		sly = self.qDf
 
-		sly = self.qDf.ix[self.qDf.Symbol == sym]
+		if (len(self.qDf) < 1):
+			self.sly = []
+			return self.sly
+
+		sly = sly.ix[sly.Symbol == sym]
 		
 		sly = sly.ix[sly.Date >= begin.strftime("%Y-%m-%d")]
 		sly = sly.ix[sly.Date <= end.strftime("%Y-%m-%d")]
